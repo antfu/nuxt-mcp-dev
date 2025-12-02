@@ -16,6 +16,8 @@ This monorepo contains two packages:
 > [!IMPORTANT]
 > Experimental. Use with caution.
 
+> If you are looking to build a MCP server for your Nuxt application, checkout the [@nuxtjs/mcp-toolkit](https://github.com/nuxt-modules/mcp-toolkit) module.
+
 ## Sponsors
 
 <p align="center">
