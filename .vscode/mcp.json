@@ -1,8 +1,8 @@
 {
   "servers": {
     "nuxt-docs": {
-      "type": "sse",
-      "url": "https://mcp.nuxt.com/sse"
+      "type": "http",
+      "url": "https://nuxt.com/mcp"
     },
     "vite": {
       "type": "sse",
