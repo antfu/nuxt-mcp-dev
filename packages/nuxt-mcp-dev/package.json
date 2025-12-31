@@ -1,7 +1,7 @@
 {
   "name": "nuxt-mcp-dev",
   "type": "module",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "MCP server from your Nuxt dev server helping models to understand your Nuxt app better.",
   "license": "MIT",
   "homepage": "https://github.com/antfu/nuxt-mcp-dev#readme",
