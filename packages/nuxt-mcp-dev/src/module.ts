@@ -10,7 +10,7 @@ import { toolsScaffold } from './tools/scaffold'
 
 export interface ModuleOptions extends ViteMcpOptions {
   /**
-   * Includes the online Nuxt MCP server from https://mcp.nuxt.com/sse
+   * Includes the online Nuxt MCP server from https://nuxt.com/mcp
    *
    * This MCP would provide information about the Nuxt ecosystem, including
    * the latest documentation, available modules, etc.
@@ -53,7 +53,7 @@ export default defineNuxtModule<ModuleOptions>({
           options.includeNuxtDocsMcp
             ? [{
                 name: 'nuxt-docs',
-                url: 'https://mcp.nuxt.com/sse',
+                url: 'https://nuxt.com/mcp',
               }]
             : []),
       ],
