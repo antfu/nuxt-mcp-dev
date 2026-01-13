@@ -6,7 +6,7 @@
 [![JSDocs][jsdocs-src]][jsdocs-href]
 [![License][license-src]][license-href]
 
-MCP server helping models to understand your Vite/Nuxt app better.
+MCP server helping models to understand your local Vite/Nuxt app better.
 
 This monorepo contains two packages:
 
@@ -16,7 +16,9 @@ This monorepo contains two packages:
 > [!IMPORTANT]
 > Experimental. Use with caution.
 
-> If you are looking to build a MCP server for your Nuxt application, checkout the [@nuxtjs/mcp-toolkit](https://github.com/nuxt-modules/mcp-toolkit) module.
+> To build a MCP server for your Nuxt application, checkout the [@nuxtjs/mcp-toolkit](https://github.com/nuxt-modules/mcp-toolkit) module.
+
+> To add the Nuxt documentation MCP server, checkout https://nuxt.com/docs/4.x/guide/ai/mcp
 
 ## Sponsors
 
