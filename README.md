@@ -8,6 +8,10 @@
 
 MCP server helping models to understand your local Vite/Nuxt app better.
 
+<a href="https://glama.ai/mcp/servers/@antfu/nuxt-mcp-dev">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@antfu/nuxt-mcp-dev/badge" alt="Nuxt Dev MCP server" />
+</a>
+
 This monorepo contains two packages:
 
 - [`nuxt-mcp-dev`](./packages/nuxt-mcp-dev) - A Nuxt module for adding MCP support to your Nuxt dev server.
