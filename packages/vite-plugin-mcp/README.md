@@ -48,7 +48,7 @@ Then the MCP server will be available at `http://localhost:5173/__mcp/sse`.
 [npm-downloads-href]: https://npmjs.com/package/vite-plugin-mcp
 [bundle-src]: https://img.shields.io/bundlephobia/minzip/vite-plugin-mcp?style=flat&colorA=080f12&colorB=1fa669&label=minzip
 [bundle-href]: https://bundlephobia.com/result?p=vite-plugin-mcp
-[license-src]: https://img.shields.io/github/license/antfu/vite-plugin-mcp.svg?style=flat&colorA=080f12&colorB=1fa669
-[license-href]: https://github.com/antfu/vite-plugin-mcp/blob/main/LICENSE
+[license-src]: https://img.shields.io/github/license/antfu/nuxt-mcp-dev.svg?style=flat&colorA=080f12&colorB=1fa669
+[license-href]: https://github.com/antfu/nuxt-mcp-dev/blob/main/LICENSE
 [jsdocs-src]: https://img.shields.io/badge/jsdocs-reference-080f12?style=flat&colorA=080f12&colorB=1fa669
 [jsdocs-href]: https://www.jsdocs.io/package/vite-plugin-mcp
