@@ -2,6 +2,7 @@ import type { Nitro } from 'nitropack'
 import type { Unimport } from 'unimport'
 import type { ViteMcpOptions } from 'vite-plugin-mcp'
 import type { McpToolContext } from './types'
+import { basename } from 'node:path'
 import { addVitePlugin, defineNuxtModule } from '@nuxt/kit'
 import { ViteMcp } from 'vite-plugin-mcp'
 import { promptNuxtBasic } from './prompts/basic'
@@ -44,8 +45,14 @@ export default defineNuxtModule<ModuleOptions>({
       nitro.resolve(_nitro)
     })
 
+    // Derive a unique server name from the project directory so that multiple
+    // Nuxt apps in a monorepo each get their own entry in the MCP config file
+    // instead of overwriting each other's "nuxt" key.  Falls back to 'nuxt'
+    // when the user has explicitly set updateConfigServerName.
+    const defaultServerName = `nuxt-${basename(nuxt.options.rootDir)}`
+
     addVitePlugin(ViteMcp({
-      updateConfigServerName: 'nuxt',
+      updateConfigServerName: defaultServerName,
       ...options,
       updateConfigAdditionalServers: [
         ...options.updateConfigAdditionalServers || [],
