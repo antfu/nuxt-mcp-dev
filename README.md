@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/antfu-nuxt-mcp-dev-badge.png)](https://mseep.ai/app/antfu-nuxt-mcp-dev)
+
 # nuxt-mcp-dev / vite-plugin-mcp
 
 [![npm version][npm-version-src]][npm-version-href]
