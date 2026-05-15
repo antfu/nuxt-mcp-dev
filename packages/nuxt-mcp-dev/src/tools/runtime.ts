@@ -1,6 +1,7 @@
 import type { Component, NuxtPage } from '@nuxt/schema'
 import type { McpToolContext } from '../types'
 import { useNuxt } from '@nuxt/kit'
+import { z } from 'zod'
 
 export function useToolsRuntime(): {
   registerTools: (context: McpToolContext) => void
@@ -66,12 +67,45 @@ export function useToolsRuntime(): {
     mcp.tool(
       'list-nuxt-components',
       'List registered components in the Nuxt app. When adding importing new components, check available components from this tool.',
-      {},
-      async () => {
+      {
+        filter: z.string()
+          .optional()
+          .describe('Filter components by name (case-insensitive substring match)'),
+        page: z.number()
+          .int()
+          .min(1)
+          .optional()
+          .describe('Page number, starts from 1 (default: 1)'),
+        pageSize: z.number()
+          .int()
+          .min(1)
+          .max(200)
+          .optional()
+          .describe('Number of components per page (default: 50, max: 200)'),
+      },
+      async ({ filter, page = 1, pageSize = 50 }) => {
+        let filtered = components
+
+        if (filter) {
+          const keyword = filter.toLowerCase()
+          filtered = filtered.filter(c =>
+            c.pascalName?.toLowerCase().includes(keyword)
+            || c.kebabName?.toLowerCase().includes(keyword),
+          )
+        }
+
+        const total = filtered.length
+        const totalPages = Math.ceil(total / pageSize)
+        const start = (page - 1) * pageSize
+        const paginated = filtered.slice(start, start + pageSize)
+
         return {
           content: [{
             type: 'text',
-            text: JSON.stringify(components, null, 2),
+            text: JSON.stringify({
+              components: paginated,
+              pagination: { page, pageSize, total, totalPages },
+            }, null, 2),
           }],
         }
       },
