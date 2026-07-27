@@ -5,17 +5,45 @@ import DEBUG from 'debug'
 
 const debug = DEBUG('vite:mcp:server')
 
-export async function setupRoutes(base: string, server: McpServer, vite: ViteDevServer): Promise<void> {
-  const transports = new Map<string, SSEServerTransport>()
+interface McpSession {
+  transport: SSEServerTransport
+  server: McpServer
+}
+
+export async function setupRoutes(
+  base: string,
+  createMcpServer: () => Promise<McpServer>,
+  vite: ViteDevServer,
+): Promise<void> {
+  const sessions = new Map<string, McpSession>()
 
   vite.middlewares.use(`${base}/sse`, async (req, res) => {
-    const transport = new SSEServerTransport(`${base}/messages`, res)
-    transports.set(transport.sessionId, transport)
-    debug('SSE Connected %s', transport.sessionId)
-    res.on('close', () => {
-      transports.delete(transport.sessionId)
-    })
-    await server.connect(transport)
+    try {
+      const transport = new SSEServerTransport(`${base}/messages`, res)
+      // One McpServer per connection: the SDK's Protocol owns a single transport per instance
+      // and throws on a second connect, so a single shared server rejects every client after
+      // the first. In dev an editor and one or more CLI agents legitimately attach at once.
+      const server = await createMcpServer()
+      sessions.set(transport.sessionId, { transport, server })
+      debug('SSE Connected %s', transport.sessionId)
+      res.on('close', () => {
+        sessions.delete(transport.sessionId)
+        Promise.resolve(server.close()).catch(error => debug('Close failed %o', error))
+      })
+      // A caller-supplied `mcpServer` option may still hand back a shared instance, which can
+      // only hold one transport; let the newest client take over rather than throw.
+      if (server.server.transport)
+        await server.close()
+      await server.connect(transport)
+    }
+    catch (error) {
+      // Without this, the rejection escapes as an unhandledRejection and can take the whole dev
+      // server down, instead of failing just the one connection that could not be established.
+      debug('SSE connect failed %o', error)
+      if (!res.headersSent)
+        res.statusCode = 500
+      res.end(String(error))
+    }
   })
 
   vite.middlewares.use(`${base}/messages`, async (req, res) => {
@@ -34,14 +62,14 @@ export async function setupRoutes(base: string, server: McpServer, vite: ViteDev
       return
     }
 
-    const transport = transports.get(clientId)
-    if (!transport) {
+    const session = sessions.get(clientId)
+    if (!session) {
       res.statusCode = 404
       res.end('Not Found')
       return
     }
 
     debug('Message from %s', clientId)
-    await transport.handlePostMessage(req, res)
+    await session.transport.handlePostMessage(req, res)
   })
 }

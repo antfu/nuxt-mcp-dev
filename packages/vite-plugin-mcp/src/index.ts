@@ -1,3 +1,4 @@
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import type { Plugin, ViteDevServer } from 'vite'
 import type { ViteMcpOptions } from './types'
 import { existsSync } from 'node:fs'
@@ -23,9 +24,11 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
   return {
     name: 'vite-plugin-mcp',
     async configureServer(vite) {
-      let mcp = await mcpServer(vite)
-      mcp = await options.mcpServerSetup?.(mcp, vite) || mcp
-      await setupRoutes(mcpRoute, mcp, vite)
+      const createMcpServer = async (): Promise<McpServer> => {
+        const mcp = await mcpServer(vite)
+        return await options.mcpServerSetup?.(mcp, vite) || mcp
+      }
+      await setupRoutes(mcpRoute, createMcpServer, vite)
 
       const port = vite.config.server.port
       const root = searchForWorkspaceRoot(vite.config.root)
